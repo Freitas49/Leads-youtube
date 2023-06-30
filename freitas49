@@ -1,0 +1,27 @@
+import csv
+from googleapiclient.discovery import build
+
+
+api_key = "AIzaSyCA-FeCXfJlQ3Cyuwp8zFf3F95-ow6OPG8"
+
+
+youtube = build("youtube", "v3", developerKey=api_key)
+
+
+response = youtube.subscriptions().list(
+    part="subscriberSnippet",
+    mine=True
+).execute()
+
+
+with open("inscritos.csv", "w", newline="", encoding="utf-8") as file:
+    writer = csv.writer(file)
+    writer.writerow(["Nome", "ID"])
+
+
+    for item in response["items"]:
+        subscriber = item["subscriberSnippet"]
+        writer.writerow([subscriber["title"], subscriber["channelId"]])
+
+
+  
